@@ -2,15 +2,17 @@
 {
     public class ElevadorSubindo : Estado
     {
-        public ElevadorSubindo(Estado estado)
-            :this(estado.AndarAtual, estado.AndarDesejado, estado.Controle, estado.Elevador)
-        {            
+        private readonly int _andarDesejado; 
+
+        public ElevadorSubindo(int andarDesejado, Estado estado)
+            :this(estado.AndarAtual, estado.Controle, estado.Elevador)
+        {
+            _andarDesejado = andarDesejado;
         }
 
-        public ElevadorSubindo(int andarAtual, int andarDesejado, bool[] controle, ControleElevador elevador)
+        private ElevadorSubindo(int andarAtual, bool[] controle, ControleElevador elevador)
         {
             AndarAtual = andarAtual;
-            AndarDesejado = andarDesejado;
             Controle = controle;
             Elevador = elevador;
         }
@@ -19,11 +21,14 @@
         {
             var mensagem = string.Empty;
 
+            if (_andarDesejado < 1 || _andarDesejado > Elevador.ObterAndares())
+                return "Andar inválido.";
+
             for (int i = AndarAtual; i <= Elevador.ObterAndares(); i++)
             {
                 if (Controle[i])
                 {
-                    mensagem = PararNoAndar(AndarDesejado);
+                    mensagem = PararNoAndar(_andarDesejado);
                     Elevador.EstadoAtual = new ElevadorParado(this);
                     break;
                 }                  

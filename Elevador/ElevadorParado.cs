@@ -23,20 +23,20 @@ namespace Elevador
             Console.WriteLine("");
             Console.WriteLine($"Para qual andar você deseja ir?");
 
-            AndarDesejado = Elevador.ValidarEntrada();       
+            var andarDesejado = Elevador.ValidarEntrada();
 
-            if (AndarAtual < AndarDesejado)
+            if (AndarAtual < andarDesejado)
             {
-                Elevador.EstadoAtual = new ElevadorSubindo(this);
+                Elevador.EstadoAtual = new ElevadorSubindo(andarDesejado, this);
                 return "Elevador subindo...";
             }
-            else if (AndarAtual > AndarDesejado)
+            else if (AndarAtual > andarDesejado)
             {
-                Elevador.EstadoAtual = new ElevadorDescendo(this);
+                Elevador.EstadoAtual = new ElevadorDescendo(andarDesejado, this);
                 return "Elevador descendo...";
             }
             else
-                return "O elevador já se encontra no andar.";
+                return "O elevador já encontra-se no andar.";
         }
     }
 }

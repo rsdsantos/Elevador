@@ -4,7 +4,6 @@
     {
         public ControleElevador Elevador { get; set; }
         public int AndarAtual { get; set; }
-        public int AndarDesejado { get; set; }
         public bool[] Controle { get; set; }
 
         public abstract string MovimentarElevador();

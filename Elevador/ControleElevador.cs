@@ -34,13 +34,13 @@ namespace Elevador
 
             if (!int.TryParse(entrada, out int resultado))
             {
-                Console.WriteLine("Somente valores numéricos são aceitos. Informe novamente o andar desejado:");
+                Console.WriteLine("Somente valores numéricos. Informe novamente o andar desejado:");
                 goto NovaEntrada;
             }
 
             else if (resultado < 1 || resultado > _andaresDoPredio)
             {
-                Console.WriteLine($"Este elevador vai apenas do 1º ao {_andaresDoPredio}º andar. Informe novamente o andar desejado:");
+                Console.WriteLine($"Este elevador vai do 1º ao {_andaresDoPredio}º andar. Informe novamente o andar desejado:");
                 goto NovaEntrada;
             }                          
 
