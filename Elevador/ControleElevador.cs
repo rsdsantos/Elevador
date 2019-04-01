@@ -4,80 +4,47 @@ namespace Elevador
 {
     public class ControleElevador
     {
-        private int _andarAtual;
-        private readonly bool[] _controle;
+        public Estado EstadoAtual;
         private readonly int _andaresDoPredio;
 
         public ControleElevador(int andaresDoPredio)
-        {            
+        {
             _andaresDoPredio = andaresDoPredio;
-            _controle = new bool[andaresDoPredio + 1];
-            _andarAtual = 1; // O primeiro andar será considerado padrão.             
+            EstadoAtual = new ElevadorParado(1, this); // O 1º andar é o padrão.
+        }        
+
+        public void IniciarElevador()
+        {
+            while (true)
+                Console.WriteLine(EstadoAtual.MovimentarElevador());
         }
 
-        public void IrParaAndar(int andarPressionado)
+        public int ObterAndares()
         {
-            if (andarPressionado < 1 || andarPressionado > _andaresDoPredio)
+            return _andaresDoPredio;
+        }
+
+        public int ValidarEntrada()
+        {
+            NovaEntrada:
+            var entrada = Console.ReadLine();
+
+            if (entrada == "0")
+                Environment.Exit(0);
+
+            if (!int.TryParse(entrada, out int resultado))
             {
-                Console.WriteLine($"Este elevador só vai do 1º ao {_andaresDoPredio}º andar.");
-                return;
-            }                
-
-            _controle[andarPressionado] = true;
-
-            if (_andarAtual < andarPressionado)
-                SubirParaAndar(andarPressionado);
-
-            else if (_andarAtual == andarPressionado)
-                JaEstaNoAndar();
-
-            else
-                DescerParaAndar(andarPressionado);
-        }
-
-        private void JaEstaNoAndar()
-        {
-            Console.WriteLine("O elevador já está no andar escolhido.");
-        }
-
-        private void DescerParaAndar(int andarPressionado)
-        {
-            Console.WriteLine("Elevador descendo...");
-
-            for (int i = _andarAtual; i >= 1; i--)
-            {
-                if (_controle[i])
-                {
-                    PararNoAndar(andarPressionado);
-                    break;
-                }                    
-                else
-                    continue;
-            }      
-        }
-
-        private void SubirParaAndar(int andarPressionado)
-        {
-            Console.WriteLine("Elevador subindo...");
-
-            for (int i = _andarAtual; i <= _andaresDoPredio; i++)
-            {
-                if (_controle[i])
-                {
-                    PararNoAndar(andarPressionado);
-                    break;
-                }                    
-                else
-                    continue;
+                Console.WriteLine("Somente valores numéricos são aceitos. Informe novamente o andar desejado:");
+                goto NovaEntrada;
             }
-        }
 
-        private void PararNoAndar(int andarPressionado)
-        {
-            _andarAtual = andarPressionado;
-            _controle[andarPressionado] = false;
+            else if (resultado < 1 || resultado > _andaresDoPredio)
+            {
+                Console.WriteLine($"Este elevador vai apenas do 1º ao {_andaresDoPredio}º andar. Informe novamente o andar desejado:");
+                goto NovaEntrada;
+            }                          
 
-            Console.WriteLine($"Parado no {andarPressionado}º andar.");
+            return resultado;
         }
     }
 }
